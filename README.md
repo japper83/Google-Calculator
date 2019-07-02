@@ -7,6 +7,14 @@ Google Traffic time Calculator with Flask
 * Git 
 * [Google Directions API Key](https://cloud.google.com/maps-platform/?apis=routes) 
 
+### Create a virtualenv
+To create a virtualenv run the following commands.
+```
+pip install virtualenv
+virtualenv googlecalculator
+source googlecalculator/bin/activate
+```
+
 ### Installing
 Clone this repository.
 ```
