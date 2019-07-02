@@ -1,0 +1,97 @@
+{% extends "menu.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+    </button>
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+<form method="POST" action="/" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    {% for error in form.filename.errors %}
+    <div id="error" class="alert alert-danger" role="alert">{{ error }}
+    </div>
+    {% endfor %}
+    {{ form.filename.label }} {{ form.filename(class="form-control" ) }}
+    {% for error in form.start.errors %}
+    <div id="error" class="alert alert-danger" role="alert">{{ error }}
+    </div>
+    {% endfor %}
+    {{ form.start.label }} {{ form.start(class="form-control" ) }}
+    {% for error in form.end.errors %}
+    <div id="error" class="alert alert-danger" role="alert">{{ error }}
+    </div>
+    {% endfor %}
+    {{ form.end.label }} {{ form.end(class="form-control" ) }}
+    <div id="map" style="height: 500px;width: 800px; float: none; margin: 0 auto;"></div>
+    <br>
+    {{ form.submit_data(class_="form-control btn btn-primary") }}
+</form>
+<div class="container" style="min-height:100% width:80%">
+
+    <script>
+        var count = 0;
+
+
+        function initMap() {
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: {lat: 51.946766, lng: 6.017222}
+            });
+
+            directionsDisplay.setMap(map);
+
+            map.addListener('click', function (e) {
+                placeMarkerAndPanTo(e.latLng, map, directionsService, directionsDisplay);
+            });
+
+        }
+
+        function placeMarkerAndPanTo(latLng, map, directionsService, directionsDisplay) {
+            count++;
+            if (count <= 2) {
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+                var latLng_string = String(latLng);
+                var result = latLng_string.slice(1, -1)
+                if (count == 1) {
+                    document.getElementById("start").value = result;
+                } else if (count == 2) {
+                    document.getElementById("end").value = result;
+                    calculateAndDisplayRoute(directionsService, directionsDisplay)
+                }
+                map.panTo(latLng);
+            }
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            directionsService.route({
+                origin: document.getElementById('start').value,
+                destination: document.getElementById('end').value,
+                travelMode: 'DRIVING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf8Doh2Yu24hSOeuE77RD2uuw3NXdmbgk&callback=initMap">
+    </script>
+    {% endblock %}

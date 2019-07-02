@@ -1,0 +1,32 @@
+{% extends "menu.html" %}
+{% block content %}
+<body>
+<form action="" method="post">
+    <label> Download File</label>
+    {{ downloadfile.csrf_token }}
+    <select class="form-control" id="selectDownloads"
+            name="selectDownloads" size="10" multiple="multiple">
+        {% if files: %}
+        {% for filename in files: %}
+        <option>{{filename}}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    {{ downloadfile.download_file(class_="form-control btn btn-success") }}
+</form>
+</br>
+<form action="" method="post">
+    <label> Delete File</label>
+    {{ removefile.csrf_token }}
+    <select class="form-control" id="selectFiles"
+            name="selectFiles" size="10" multiple="multiple">
+        {% if files: %}
+        {% for filename in files: %}
+        <option>{{filename}}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+    {{ removefile.remove_file(class_="form-control btn btn-danger") }}
+</form>
+</body>
+{% endblock %}
