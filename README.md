@@ -33,4 +33,4 @@ FLASK_APP=main.py flask run --host 0.0.0.0
 ```
 
 The site is now available on port 5000
-Change the Google API-Token in the settings page of the site.
+Change the Google API-Token in the settings page of the site and in template/index.html
