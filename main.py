@@ -177,7 +177,7 @@ def downloads():
                 df_csv.to_excel(writer, f_short_name, index=False)
 
                 writer.save()
-        return send_file('traffic_data/compiled.xlsx', attachment_filename='compiled.xlsx')
+        return send_file('traffic_data/compiled.xlsx', as_attachment=True attachment_filename='compiled.xlsx')
 
     if (all(x in files for x in
             request.form.getlist('selectFiles'))) and removefile.validate_on_submit() and request.form.getlist(
